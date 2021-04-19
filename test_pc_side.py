@@ -7,14 +7,22 @@ Depending on network speeds (and ESP clock speed) this test may take a couple of
 import socket               
 import datetime
 from time import sleep
- 
-host = "192.168.100.38" # ESP IP in local network
 
+"""
+CONFIGURATION
+"""
+# ESP IP in local network
+host = "192.168.100.39"
+
+# Regarding ESP32, 5 concurrent streams is the MAXIMUM!
+# Regarding ESP8266, no limit of streams is known (testet and could handle easily 100+ streams)
+concurrent_connections = 5
+
+"""
+PROGRAM
+"""
 base_port = 80
 management_port = 1000
-
-# message = 'Hello World'
-# sock.send(message.encode())
 
 def singleTest():
     print('Single connection test started')
@@ -74,6 +82,10 @@ def parallelTest(connectionsCount):
                 if(all(x > 0 for x in byte_counts)):
                     host_is_alive = True
                     print("[SUCCESS] Host is alive and all streams are carrying data. Please wait for test to finish...")
+                else:
+                    if (datetime.datetime.now() - start).total_seconds() > 2:
+                        print("[ERROR] Host does not seem to send anything")
+                        return
             for index, (buffer, sock, byte_count) in enumerate(zip(data_buffers, connections, byte_counts)):
                 data_buffers[index] = connections[index].recv(32768)
                 byte_counts[index] += len(data_buffers[index])
@@ -90,7 +102,4 @@ def parallelTest(connectionsCount):
 
 if __name__ == '__main__':
     # singleTest()
-
-    # Regarding ESP32, 5 concurrent streams is the MAXIMUM!
-    # Regarding ESP8266, no limit of streams is known (testet and could handle easily 100+ streams)
-    parallelTest(6)
+    parallelTest(concurrent_connections)
