@@ -8,7 +8,7 @@ The counterpart software has to be installed on the ESP target.
 Using this script, the usable data-thoughput from the ESP to the computer can be measured.
 Depending on network speeds (and ESP clock speed) this test may take a couple of minutes. 
 
-# Note
+# Note on concurrent streams
 
 :bangbang: Regarding ESP8266, no limit of streams is known (testet and could handle easily 100+ streams)
 
@@ -16,9 +16,11 @@ Depending on network speeds (and ESP clock speed) this test may take a couple of
 
 # Sample result for ESP32 (5 concurrent streams)
 ![](img/esp32_sample.png)
+-> Maximum achievable speed in my tests: 5.25 Mbit/s @ 5 streams
 
 # Sample result for ESP8266 (5 concurrent streams)
 ![](img/esp8266_sample.png)
+-> Maximum achievable speed in my tests: 2.9 Mbit/s @ 25 streams
 
 # Usage
 Download "Platform IO" and load either the esp32 or ep8266 program (depending on your device) onto the device. Make sure it is connected to the network by using a serial monitor: the program will tell you its IP address as soon as it connected successfully. :bangbang: In my tests i had to reset the esp32 a couple of times to get it connected, this is assumed an esp32 error because this procedure was not necessary on the esp8266.
